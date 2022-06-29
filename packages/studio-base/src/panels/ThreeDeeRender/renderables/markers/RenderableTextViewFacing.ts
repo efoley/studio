@@ -2,74 +2,31 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import * as base64 from "@protobufjs/base64";
-import Lato from "bmfont-lato";
-import LatoDataURI from "bmfont-lato/image-uri";
 import * as THREE from "three";
-// import { Text } from "troika-three-text";
-import createText from "three-bmfont-text";
+import createText, { type TextGeometry } from "three-bmfont-text";
 
-import { areEqual } from "@foxglove/rostime";
-
-import { LabelRenderable } from "../../Labels";
 import type { Renderer } from "../../Renderer";
-import { rgbaEqual, rgbToThreeColor } from "../../color";
+import { rgbToThreeColor } from "../../color";
 import { Marker } from "../../ros";
-import { poseApproxEq } from "../../transforms";
 import { RenderableMarker } from "./RenderableMarker";
 
-const pp = new Promise((r) => {
-  new THREE.TextureLoader().load(
-    // resource URL
-    LatoDataURI,
-
-    // onLoad callback
-    (texture) => {
-      // in this example we create the material when the texture is loaded
-      r(texture);
-    },
-  );
-});
-
 export class RenderableTextViewFacing extends RenderableMarker {
-  label: LabelRenderable | undefined;
-  textGeometry = createText({ font: Lato });
-  textMaterial = new THREE.MeshBasicMaterial({
-    transparent: true,
-    color: 0xff0000,
-    side: THREE.DoubleSide,
-  });
-  text = new THREE.Mesh(this.textGeometry, this.textMaterial);
-  // text = new Text();
-  // color = new THREE.Color();
+  textGeometry: TextGeometry;
+  textMaterial: THREE.MeshBasicMaterial;
+  text: THREE.Mesh;
 
   constructor(topic: string, marker: Marker, receiveTime: bigint | undefined, renderer: Renderer) {
     super(topic, marker, receiveTime, renderer);
 
-    // new THREE.texture
-    // this.textMaterial.map = THREE.ImageUtils.loadTexture(LatoDataURI);
-    // const str = base64.encode(
-    //   new Uint8Array(
-    //     Lato.images[0]!.data.buffer,
-    //     Lato.images[0]!.data.byteOffset,
-    //     Lato.images[0]!.data.byteLength,
-    //   ),
-    //   0,
-    //   Lato.images[0]!.data.byteLength,
-    // );
-    // console.log("enc:", str);
-    this.textMaterial.map = new THREE.DataTexture(
-      Lato.images[0]!.data,
-      Lato.images[0]!.shape[0],
-      Lato.images[0]!.shape[1],
-      // THREE.RGBAFormat,
-      // THREE.UnsignedByteType,
-    );
-    this.textMaterial.map.flipY = true;
-    this.textMaterial.map.needsUpdate = true;
-    // console.log(Lato);
-    // debugger;
-    // pp.then((tex) => (this.textMaterial.map = tex));
+    this.textGeometry = createText({ flipY: true, font: renderer.fontData });
+    this.textMaterial = new THREE.MeshBasicMaterial({
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      map: renderer.fontTexture,
+    });
+    this.text = new THREE.Mesh(this.textGeometry, this.textMaterial);
+
     this.add(this.text);
     this.update(marker, receiveTime);
   }
@@ -77,11 +34,22 @@ export class RenderableTextViewFacing extends RenderableMarker {
   override dispose(): void {
     // this.renderer.labels.removeById(this.name);
     // this.text.dispose();
+    this.textGeometry.dispose();
+    this.textMaterial.dispose();
   }
 
   override update(marker: Marker, receiveTime: bigint | undefined): void {
     super.update(marker, receiveTime);
-    this.textGeometry.update({ text: marker.text, lineHeight: marker.scale.x });
+    this.textGeometry.update({ text: marker.text });
+
+    const scale = marker.scale.z / this.renderer.fontData.common.lineHeight;
+    this.text.scale.set(scale, -scale, 1);
+
+    rgbToThreeColor(this.textMaterial.color, marker.color);
+    const transparent = marker.color.a < 1;
+    this.textMaterial.transparent = transparent;
+    this.textMaterial.depthWrite = !transparent;
+
     // const prevMarker = this.userData.marker;
     this.text.userData.pose = marker.pose;
 

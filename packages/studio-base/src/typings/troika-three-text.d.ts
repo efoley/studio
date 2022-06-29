@@ -46,7 +46,18 @@ declare module "troika-three-text" {
 }
 
 declare module "bmfont-lato" {
-  export default {} as { images: Array<{ data: Uint8Array; shape: [number, number, number] }> };
+  type BMFont = {
+    images: Array<{ data: Uint8Array; shape: [number, number, number] }>;
+    common: {
+      lineHeight: number;
+      base: number;
+      scaleW: number;
+      scaleH: number;
+      pages: number;
+    };
+  };
+  declare const Lato: BMFont;
+  export default Lato;
 }
 
 declare module "three-bmfont-text" {

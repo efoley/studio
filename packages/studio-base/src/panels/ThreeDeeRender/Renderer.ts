@@ -2,6 +2,7 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Lato from "bmfont-lato";
 import EventEmitter from "eventemitter3";
 import { Immutable, produce } from "immer";
 import * as THREE from "three";
@@ -195,11 +196,22 @@ export class Renderer extends EventEmitter<RendererEvents> {
   labels = new Labels(this);
   markerPool = new MarkerPool(this);
 
+  fontData = Lato;
+  fontTexture: THREE.DataTexture;
+
   constructor(canvas: HTMLCanvasElement, config: RendererConfig) {
     super();
 
     // NOTE: Global side effect
     THREE.Object3D.DefaultUp = new THREE.Vector3(0, 0, 1);
+
+    this.fontTexture = new THREE.DataTexture(
+      this.fontData.images[0]!.data,
+      this.fontData.common.scaleW,
+      this.fontData.common.scaleH,
+    );
+    this.fontTexture.flipY = true;
+    this.fontTexture.needsUpdate = true;
 
     this.settings = new SettingsManager(baseSettingsTree());
     this.settings.on("update", () => this.emit("settingsTreeChange", this));
@@ -318,6 +330,7 @@ export class Renderer extends EventEmitter<RendererEvents> {
     }
     this.sceneExtensions.clear();
 
+    this.fontTexture.dispose();
     this.markerPool.dispose();
     this.labels.dispose();
     this.picker.dispose();
