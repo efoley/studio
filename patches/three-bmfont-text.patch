@@ -1,0 +1,58 @@
+From 832d07171cf081590a15e939b5006203c72f11e2 Mon Sep 17 00:00:00 2001
+From: jmschrack <jmschrack@gmail.com>
+Date: Mon, 21 Mar 2022 17:26:05 -0500
+Subject: [PATCH] Updated TextGeometry to use ES6 class format.
+
+---
+ index.js | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/index.js b/index.js
+index 929a3ee..7619055 100755
+--- a/index.js
++++ b/index.js
+@@ -1,32 +1,31 @@
+ var createLayout = require('layout-bmfont-text')
+-var inherits = require('inherits')
+ var createIndices = require('quad-indices')
+
+ var vertices = require('./lib/vertices')
+ var utils = require('./lib/utils')
+
+-var Base = THREE.BufferGeometry
+
+ module.exports = function createTextGeometry (opt) {
+   return new TextGeometry(opt)
+ }
+
+-function TextGeometry (opt) {
+-  Base.call(this)
++class TextGeometry extends THREE.BufferGeometry {
++  constructor(opt){
++    super(opt);
+
+-  if (typeof opt === 'string') {
+-    opt = { text: opt }
+-  }
++    if (typeof opt === 'string') {
++      opt = { text: opt }
++    }
+
+-  // use these as default values for any subsequent
+-  // calls to update()
+-  this._opt = Object.assign({}, opt)
++    // use these as default values for any subsequent
++    // calls to update()
++    this._opt = Object.assign({}, opt)
+
+-  // also do an initial setup...
+-  if (opt) this.update(opt)
++    // also do an initial setup...
++    if (opt) this.update(opt)
++  }
+ }
+
+-inherits(TextGeometry, Base)
+
+ TextGeometry.prototype.update = function (opt) {
+   if (typeof opt === 'string') {
