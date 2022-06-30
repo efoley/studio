@@ -794,7 +794,15 @@ export class Renderer extends EventEmitter<RendererEvents> {
       this.fixedFrameId = rootFrameId;
     }
 
-    this.settings.errors.clearPath(FOLLOW_TF_PATH);
+    if (this.renderFrameId !== this.followFrameId) {
+      this.settings.errors.add(
+        FOLLOW_TF_PATH,
+        FRAME_NOT_FOUND,
+        `Frame "${this.followFrameId}" not found, rendering in "${this.renderFrameId}"`,
+      );
+    } else {
+      this.settings.errors.clearPath(FOLLOW_TF_PATH);
+    }
   }
 
   private _updateMaterials(resolution: THREE.Vector2): void {
