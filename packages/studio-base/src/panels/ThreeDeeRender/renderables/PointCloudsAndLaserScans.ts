@@ -198,6 +198,13 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
       renderable.visible = renderable.userData.settings.visible;
       if (!renderable.visible) {
         this.renderer.settings.errors.clearPath(path);
+        const pointsHistory = renderable.userData.pointsHistory;
+        for (let i = 0; i < pointsHistory.length - 1; i++) {
+          const entry = pointsHistory[i]!;
+          entry.points.geometry.dispose();
+          renderable.remove(entry.points);
+        }
+        pointsHistory.splice(0, pointsHistory.length - 1);
         continue;
       }
 
