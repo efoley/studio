@@ -49,7 +49,7 @@ export class CoreSettings extends SceneExtension {
               label: "Frame",
               input: "select",
               options: this.renderer.coordinateFrameList,
-              value: this.renderer.renderFrameId ?? config.followTf,
+              value: this.renderer.followFrameId ?? config.followTf,
             },
           },
           defaultExpansionState: "expanded",
