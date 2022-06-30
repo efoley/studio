@@ -78,8 +78,19 @@ declare module "three-bmfont-text" {
     start?: number;
     end?: number;
   };
-  class TextGeometry extends THREE.BufferGeometry {
+  class BMFontTextGeometry extends THREE.BufferGeometry {
     update(options: Partial<TextGeometryOptions> | string): void;
+
+    layout: Readonly<{
+      width: number;
+      height: number;
+      baseline: number;
+      xHeight: number;
+      descender: number;
+      ascender: number;
+      capHeight: number;
+      lineHeight: number;
+    }>;
   }
-  export default function createText(options: TextGeometryOptions | string): TextGeometry;
+  export default function createText(options: TextGeometryOptions | string): BMFontTextGeometry;
 }

@@ -210,7 +210,6 @@ export class Renderer extends EventEmitter<RendererEvents> {
       this.fontData.common.scaleW,
       this.fontData.common.scaleH,
     );
-    this.fontTexture.flipY = true;
     this.fontTexture.needsUpdate = true;
 
     this.settings = new SettingsManager(baseSettingsTree());
