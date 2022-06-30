@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import * as THREE from "three";
-import createText, { type BMFontTextGeometry } from "three-bmfont-text";
 
 import type { Renderer } from "../../Renderer";
 import { SRGBToLinear } from "../../color";
@@ -11,8 +10,6 @@ import { Marker } from "../../ros";
 import { RenderableMarker } from "./RenderableMarker";
 
 export class RenderableTextViewFacing extends RenderableMarker {
-  textGeometry: BMFontTextGeometry;
-  textMaterial: TextMaterial;
   text: THREE.Mesh;
 
   constructor(topic: string, marker: Marker, receiveTime: bigint | undefined, renderer: Renderer) {

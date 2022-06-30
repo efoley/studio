@@ -2,7 +2,6 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Lato from "bmfont-lato";
 import EventEmitter from "eventemitter3";
 import { Immutable, produce } from "immer";
 import * as THREE from "three";
@@ -192,9 +191,6 @@ export class Renderer extends EventEmitter<RendererEvents> {
 
   labels = new Labels(this);
   markerPool = new MarkerPool(this);
-
-  fontData = Lato;
-  fontTexture: THREE.DataTexture;
 
   constructor(canvas: HTMLCanvasElement, config: RendererConfig) {
     super();
