@@ -78,7 +78,7 @@ export class FontManager {
     const atlasWidth = 1024;
     const atlasHeight = 1024;
     const atlas = new Uint8ClampedArray(atlasWidth * atlasHeight);
-    const tinysdf = new TinySDF({ fontSize: 100, buffer: 10 });
+    const tinysdf = new TinySDF({ fontSize: 48, fontFamily: "monospace" });
 
     const charInfo: Record<string, CharInfo> = {};
     let x = 0;
@@ -110,7 +110,8 @@ export class FontManager {
         width: sdf.width,
         height: sdf.height,
         yOffset: sdf.glyphTop,
-        xAdvance: sdf.glyphAdvance,
+        // xAdvance: sdf.glyphAdvance, //FIXME: overlaps = sadness
+        xAdvance: sdf.width,
       };
       maxAscent = Math.max(maxAscent, sdf.glyphTop);
       x += sdf.width;

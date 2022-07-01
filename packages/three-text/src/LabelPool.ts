@@ -17,8 +17,9 @@ precision highp int;
 uniform mat4 projectionMatrix, modelViewMatrix, modelMatrix;
 
 uniform float uScale;
-uniform vec2 uCenter;
+uniform vec2 uLabelSize;
 uniform vec2 uTextureSize;
+uniform vec2 uCenter;
 
 in vec2 uv;
 in vec2 position;
@@ -26,12 +27,16 @@ in vec2 instanceBoxPosition, instanceCharPosition;
 in vec2 instanceUv;
 in vec2 instanceBoxSize, instanceCharSize;
 out mediump vec2 vUv;
+out mediump vec2 vInsideChar;
+out mediump vec2 vPosInLabel;
 void main() {
   // Adjust uv coordinates so they are in the 0-1 range in the character region
   vec2 boxUv = (uv * instanceBoxSize - (instanceCharPosition - instanceBoxPosition)) / instanceCharSize;
   // vUv = (instanceUv + uv * instanceBoxSize) / uTextureSize;
-  vUv = boxUv;
-  vec2 vertexPos = (instanceBoxPosition + position * instanceBoxSize) / uTextureSize * uScale;
+  vInsideChar = boxUv;
+  vUv = (instanceUv + boxUv * instanceCharSize) / uTextureSize;
+  vec2 vertexPos = (instanceBoxPosition + position * instanceBoxSize) * uScale;
+  vPosInLabel = (instanceBoxPosition + position * instanceBoxSize);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(vertexPos, 0.0, 1.0);
 
   return;
@@ -67,40 +72,58 @@ uniform sampler2D uMap;
 uniform float uOpacity;
 ${picking ? "uniform vec4 objectId;" : ""}
 uniform mediump vec3 uColor, uBackgroundColor;
+uniform float uScale;
+uniform vec2 uLabelSize;
 in mediump vec2 vUv;
+in mediump vec2 vPosInLabel;
+in mediump vec2 vInsideChar;
 out vec4 outColor;
 
 ${THREE.ShaderChunk.encodings_pars_fragment /* for LinearTosRGB() */}
 
 // From https://github.com/Jam3/three-bmfont-text/blob/e17efbe4e9392a83d4c5ee35c67eca5a11a13395/shaders/sdf.js
-float aastep(float value) {
+float aastep(float threshold, float value) {
   float afwidth = length(vec2(dFdx(value), dFdy(value))) * 0.70710678118654757;
-  return smoothstep(0.5 - afwidth, 0.5 + afwidth, value);
+  return smoothstep(threshold - afwidth, threshold + afwidth, value);
 }
 
 void main() {
-  vec4 texColor = texture(uMap, vUv);
-  vec4 color = vec4(uBackgroundColor.rgb * (1.0 - texColor.a) + uColor * texColor.a, uOpacity);
-  outColor = LinearTosRGB(color);
+  float dist = texture(uMap, vUv).a;
+  vec4 color = vec4(uBackgroundColor.rgb * (1.0 - dist) + uColor * dist, uOpacity);
+  // outColor = LinearTosRGB(color);
 
-  float alpha = aastep(texColor.a);
-  // outColor = LinearTosRGB(vec4(mix(uBackgroundColor.rgb, uColor.rgb, alpha), uOpacity));
-  outColor = LinearTosRGB(vec4(uColor, uOpacity * alpha));
-  // if (uOpacity * alpha < 0.001) {
+  outColor = vec4(mix(uBackgroundColor, uColor, aastep(0.75, dist)), 1.);
+
+  bool insideChar = vInsideChar.x >= 0.0 && vInsideChar.x <= 1.0 && vInsideChar.y >= 0.0 && vInsideChar.y <= 1.0;
+  outColor = insideChar ? outColor : vec4(uBackgroundColor, 1.);
+  outColor = LinearTosRGB(outColor);
+
+  // outColor = insideChar ? vec4(0.,1.,0.,1.) : vec4(1.0,0.0,0.0, 1.0);
+
+  float cornerRadius = min(0.1 * uLabelSize.x, 0.1 * uLabelSize.y);
+  // float cornerRadiusX = cornerRadiusY * uLabelSize.x / uLabelSize.y;
+  float bl = length(cornerRadius - min(vPosInLabel, cornerRadius));
+  float tl = length(cornerRadius - min(vec2(vPosInLabel.x, uLabelSize.y - vPosInLabel.y), cornerRadius));
+  float tr = length(cornerRadius - min(vec2(uLabelSize.x - vPosInLabel.x, uLabelSize.y - vPosInLabel.y), cornerRadius));
+  float br = length(cornerRadius - min(vec2(uLabelSize.x - vPosInLabel.x, vPosInLabel.y), cornerRadius));
+
+  vec2 borderPos = vec2(
+    vPosInLabel.x < cornerRadius ? vPosInLabel.x : uLabelSize.x - vPosInLabel.x < cornerRadius ? uLabelSize.x - vPosInLabel.x : cornerRadius,
+    vPosInLabel.y < cornerRadius ? vPosInLabel.y : uLabelSize.y - vPosInLabel.y < cornerRadius ? uLabelSize.y - vPosInLabel.y : cornerRadius
+  );
+
+  outColor.a *= 1.0 - aastep(cornerRadius, length(cornerRadius - borderPos));
+  // if (length(cornerRadius - borderPos) > cornerRadius) {
   //   discard;
   // }
-
-  // outColor = vec4(1.0, 0.0, 0.0, 1.0);
-  // outColor = texColor;
-
-  outColor = vUv.x > 0.0 && vUv.x < 1.0 && vUv.y > 0.0 && vUv.y < 1.0 ? vec4(1.0,0.5,0.0,1.0) : vec4(0.0,0.0,0.0, 1.0);
 
   ${picking ? "outColor = objectId;" : ""}
 }
 `,
       uniforms: {
         uCenter: { value: [0, 0] },
-        uScale: { value: 5 },
+        uLabelSize: { value: [0, 0] },
+        uScale: { value: 0 },
         uTextureSize: { value: [atlasTexture.image.width, atlasTexture.image.height] },
         uMap: { value: atlasTexture },
         uOpacity: { value: 1 },
@@ -188,9 +211,13 @@ export class Label extends THREE.Object3D {
       this.labelPool.update(text);
       this.material.uniforms.uTextureSize!.value[0] = this.labelPool.atlasTexture.image.width;
       this.material.uniforms.uTextureSize!.value[1] = this.labelPool.atlasTexture.image.height;
+      this.material.uniforms.uScale!.value = 1 / this.labelPool.fontManager.atlasData.lineHeight;
     }
 
     const layoutInfo = this.labelPool.fontManager.layout(this.text);
+    //FIXME: bad to use uniforms because we can't use the same material?
+    this.material.uniforms.uLabelSize!.value[0] = layoutInfo.width;
+    this.material.uniforms.uLabelSize!.value[1] = layoutInfo.height;
 
     this.geometry.instanceCount = this.mesh.count = layoutInfo.chars.length;
 

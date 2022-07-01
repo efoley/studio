@@ -26,15 +26,15 @@ export function Atlas(): JSX.Element {
     const fontManager = new FontManager();
 
     const labelPool = new LabelPool(fontManager);
-    fontManager.update("Hello world!");
+    fontManager.update("Hell//o world!");
 
     const camera = new THREE.PerspectiveCamera(
       45,
       canvas.clientWidth / canvas.clientHeight,
-      1,
-      10000,
+      0.1,
+      2000,
     );
-    camera.position.set(0, -30, 30);
+    camera.position.set(2, 2, 2);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
@@ -43,7 +43,7 @@ export function Atlas(): JSX.Element {
     scene.add(axesHelper);
 
     const label = labelPool.acquire();
-    label.update("Hello world!");
+    label.update("Hell//o world!");
     scene.add(label);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
