@@ -22,13 +22,16 @@ uniform vec2 uTextureSize;
 
 in vec2 uv;
 in vec2 position;
-in vec2 instancePosition;
+in vec2 instanceBoxPosition, instanceCharPosition;
 in vec2 instanceUv;
-in vec2 instanceSize;
+in vec2 instanceBoxSize, instanceCharSize;
 out mediump vec2 vUv;
 void main() {
-  vUv = (instanceUv + uv * instanceSize) / uTextureSize;
-  vec2 vertexPos = (instancePosition + position * instanceSize) / uTextureSize * uScale;
+  // Adjust uv coordinates so they are in the 0-1 range in the character region
+  vec2 boxUv = (uv * instanceBoxSize - (instanceCharPosition - instanceBoxPosition)) / instanceCharSize;
+  // vUv = (instanceUv + uv * instanceBoxSize) / uTextureSize;
+  vUv = boxUv;
+  vec2 vertexPos = (instanceBoxPosition + position * instanceBoxSize) / uTextureSize * uScale;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(vertexPos, 0.0, 1.0);
 
   return;
@@ -90,6 +93,8 @@ void main() {
   // outColor = vec4(1.0, 0.0, 0.0, 1.0);
   // outColor = texColor;
 
+  outColor = vUv.x > 0.0 && vUv.x < 1.0 && vUv.y > 0.0 && vUv.y < 1.0 ? vec4(1.0,0.5,0.0,1.0) : vec4(0.0,0.0,0.0, 1.0);
+
   ${picking ? "outColor = objectId;" : ""}
 }
 `,
@@ -145,20 +150,28 @@ export class Label extends THREE.Object3D {
     this.instanceAttributeData = new Float32Array();
     this.instanceAttributeBuffer = new THREE.InstancedInterleavedBuffer(
       this.instanceAttributeData,
-      6,
+      10,
       1,
     );
     this.geometry.setAttribute(
-      "instancePosition",
+      "instanceBoxPosition",
       new THREE.InterleavedBufferAttribute(this.instanceAttributeBuffer, 2, 0),
     );
     this.geometry.setAttribute(
-      "instanceUv",
+      "instanceCharPosition",
       new THREE.InterleavedBufferAttribute(this.instanceAttributeBuffer, 2, 2),
     );
     this.geometry.setAttribute(
-      "instanceSize",
+      "instanceUv",
       new THREE.InterleavedBufferAttribute(this.instanceAttributeBuffer, 2, 4),
+    );
+    this.geometry.setAttribute(
+      "instanceBoxSize",
+      new THREE.InterleavedBufferAttribute(this.instanceAttributeBuffer, 2, 6),
+    );
+    this.geometry.setAttribute(
+      "instanceCharSize",
+      new THREE.InterleavedBufferAttribute(this.instanceAttributeBuffer, 2, 8),
     );
 
     this.material = new LabelMaterial(labelPool.atlasTexture);
@@ -181,7 +194,7 @@ export class Label extends THREE.Object3D {
 
     this.geometry.instanceCount = this.mesh.count = layoutInfo.chars.length;
 
-    const requiredLength = layoutInfo.chars.length * 6 * Float32Array.BYTES_PER_ELEMENT;
+    const requiredLength = layoutInfo.chars.length * 10 * Float32Array.BYTES_PER_ELEMENT;
     if (this.instanceAttributeData.byteLength < requiredLength) {
       this.instanceAttributeBuffer.array = this.instanceAttributeData = new Float32Array(
         requiredLength,
@@ -189,13 +202,19 @@ export class Label extends THREE.Object3D {
     }
     let i = 0;
     for (const char of layoutInfo.chars) {
-      // instancePosition
-      this.instanceAttributeData[i++] = char.x;
-      this.instanceAttributeData[i++] = layoutInfo.height - char.y - char.height;
+      // instanceBoxPosition
+      this.instanceAttributeData[i++] = char.left;
+      this.instanceAttributeData[i++] = char.boxTop;
+      // instanceCharPosition
+      this.instanceAttributeData[i++] = char.left;
+      this.instanceAttributeData[i++] = char.top;
       // instanceUv
       this.instanceAttributeData[i++] = char.atlasX;
       this.instanceAttributeData[i++] = char.atlasY;
-      // instanceSize
+      // instanceBoxSize
+      this.instanceAttributeData[i++] = char.width;
+      this.instanceAttributeData[i++] = char.boxHeight;
+      // instanceCharSize
       this.instanceAttributeData[i++] = char.width;
       this.instanceAttributeData[i++] = char.height;
     }

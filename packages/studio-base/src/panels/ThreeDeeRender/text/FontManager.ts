@@ -21,10 +21,12 @@ export type AtlasData = {
   lineHeight: number;
 };
 export type CharLayoutInfo = {
-  x: number;
-  y: number;
+  left: number;
+  top: number;
   width: number;
   height: number;
+  boxTop: number;
+  boxHeight: number;
   atlasX: number;
   atlasY: number;
 };
@@ -127,19 +129,21 @@ export class FontManager {
   layout(text: string): LayoutInfo {
     const chars: CharLayoutInfo[] = [];
     let x = 0;
-    let y = 0;
+    let lineTop = 0;
     let width = 0;
     let height = 0;
     for (const char of text) {
       if (char === "\n") {
-        y += this.atlasData.lineHeight;
+        lineTop += this.atlasData.lineHeight;
         x = 0;
       } else {
         const info =
           this.atlasData.charInfo[char] ?? this.atlasData.charInfo[REPLACEMENT_CHARACTER]!;
         chars.push({
-          x,
-          y: y - info.yOffset + this.atlasData.maxAscent,
+          left: x,
+          top: lineTop - info.yOffset + this.atlasData.maxAscent,
+          boxTop: lineTop,
+          boxHeight: this.atlasData.lineHeight,
           width: info.width,
           height: info.height,
           atlasX: info.atlasX,
@@ -147,7 +151,7 @@ export class FontManager {
         });
         x += info.xAdvance;
         width = Math.max(width, x);
-        height = Math.max(height, y + this.atlasData.lineHeight);
+        height = Math.max(height, lineTop + this.atlasData.lineHeight);
       }
     }
     return { chars, width, height };
