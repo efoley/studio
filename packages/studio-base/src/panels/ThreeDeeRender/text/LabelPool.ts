@@ -23,11 +23,11 @@ uniform vec2 uTextureSize;
 in vec2 uv;
 in vec2 position;
 in vec2 instancePosition;
-in vec2 instanceUvPosition;
+in vec2 instanceUv;
 in vec2 instanceSize;
 out mediump vec2 vUv;
 void main() {
-  vUv = (instanceUvPosition + uv * instanceSize) / uTextureSize;
+  vUv = (instanceUv + uv * instanceSize) / uTextureSize;
   vec2 vertexPos = (instancePosition + position * instanceSize) / uTextureSize * uScale;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(vertexPos, 0.0, 1.0);
 
@@ -81,10 +81,11 @@ void main() {
   outColor = LinearTosRGB(color);
 
   float alpha = aastep(texColor.a);
+  // outColor = LinearTosRGB(vec4(mix(uBackgroundColor.rgb, uColor.rgb, alpha), uOpacity));
   outColor = LinearTosRGB(vec4(uColor, uOpacity * alpha));
-  if (uOpacity * alpha < 0.001) {
-    discard;
-  }
+  // if (uOpacity * alpha < 0.001) {
+  //   discard;
+  // }
 
   // outColor = vec4(1.0, 0.0, 0.0, 1.0);
   // outColor = texColor;
@@ -99,10 +100,12 @@ void main() {
         uMap: { value: atlasTexture },
         uOpacity: { value: 1 },
         uColor: { value: [1, 0, 0.5] },
-        uBackgroundColor: { value: [0, 0, 0] },
+        uBackgroundColor: { value: [0, 1, 0] },
       },
 
       side: THREE.DoubleSide,
+      transparent: true,
+      depthWrite: false,
     });
   }
 }
@@ -120,16 +123,23 @@ export class Label extends THREE.Object3D {
     super();
 
     this.geometry = new THREE.InstancedBufferGeometry();
-    this.geometry.index = new THREE.BufferAttribute(new Uint8Array([0, 1, 2, 2, 1, 3]), 1);
 
     //FIXME: share these with all labels in LabelPool?
+    const positions: [number, number][] = [
+      [0, 0],
+      [0, 1],
+      [1, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+    ];
     this.geometry.setAttribute(
       "position",
-      new THREE.BufferAttribute(new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]), 2),
+      new THREE.BufferAttribute(new Float32Array(positions.flat()), 2),
     );
     this.geometry.setAttribute(
       "uv",
-      new THREE.BufferAttribute(new Float32Array([0, 1, 0, 0, 1, 1, 1, 0]), 2),
+      new THREE.BufferAttribute(new Float32Array(positions.map(([x, y]) => [x, 1 - y]).flat()), 2),
     );
 
     this.instanceAttributeData = new Float32Array();
@@ -143,7 +153,7 @@ export class Label extends THREE.Object3D {
       new THREE.InterleavedBufferAttribute(this.instanceAttributeBuffer, 2, 0),
     );
     this.geometry.setAttribute(
-      "instanceUvPosition",
+      "instanceUv",
       new THREE.InterleavedBufferAttribute(this.instanceAttributeBuffer, 2, 2),
     );
     this.geometry.setAttribute(
@@ -179,10 +189,13 @@ export class Label extends THREE.Object3D {
     }
     let i = 0;
     for (const char of layoutInfo.chars) {
+      // instancePosition
       this.instanceAttributeData[i++] = char.x;
       this.instanceAttributeData[i++] = layoutInfo.height - char.y - char.height;
+      // instanceUv
       this.instanceAttributeData[i++] = char.atlasX;
       this.instanceAttributeData[i++] = char.atlasY;
+      // instanceSize
       this.instanceAttributeData[i++] = char.width;
       this.instanceAttributeData[i++] = char.height;
     }
@@ -226,6 +239,7 @@ export class LabelPool {
   }
 
   acquire(): Label {
+    //FIXME
     return new Label(this);
   }
 }
