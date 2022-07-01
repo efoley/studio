@@ -26,7 +26,7 @@ export function Atlas(): JSX.Element {
     const fontManager = new FontManager();
 
     const labelPool = new LabelPool(fontManager);
-    fontManager.update("Hell//o world!");
+    fontManager.update("Hello world!");
 
     const camera = new THREE.PerspectiveCamera(
       45,
@@ -43,7 +43,7 @@ export function Atlas(): JSX.Element {
     scene.add(axesHelper);
 
     const label = labelPool.acquire();
-    label.update("Hell//o world!");
+    label.update("Hello world!\nExample");
     scene.add(label);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });

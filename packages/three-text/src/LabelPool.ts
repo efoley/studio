@@ -100,23 +100,6 @@ void main() {
 
   // outColor = insideChar ? vec4(0.,1.,0.,1.) : vec4(1.0,0.0,0.0, 1.0);
 
-  float cornerRadius = min(0.1 * uLabelSize.x, 0.1 * uLabelSize.y);
-  // float cornerRadiusX = cornerRadiusY * uLabelSize.x / uLabelSize.y;
-  float bl = length(cornerRadius - min(vPosInLabel, cornerRadius));
-  float tl = length(cornerRadius - min(vec2(vPosInLabel.x, uLabelSize.y - vPosInLabel.y), cornerRadius));
-  float tr = length(cornerRadius - min(vec2(uLabelSize.x - vPosInLabel.x, uLabelSize.y - vPosInLabel.y), cornerRadius));
-  float br = length(cornerRadius - min(vec2(uLabelSize.x - vPosInLabel.x, vPosInLabel.y), cornerRadius));
-
-  vec2 borderPos = vec2(
-    vPosInLabel.x < cornerRadius ? vPosInLabel.x : uLabelSize.x - vPosInLabel.x < cornerRadius ? uLabelSize.x - vPosInLabel.x : cornerRadius,
-    vPosInLabel.y < cornerRadius ? vPosInLabel.y : uLabelSize.y - vPosInLabel.y < cornerRadius ? uLabelSize.y - vPosInLabel.y : cornerRadius
-  );
-
-  outColor.a *= 1.0 - aastep(cornerRadius, length(cornerRadius - borderPos));
-  // if (length(cornerRadius - borderPos) > cornerRadius) {
-  //   discard;
-  // }
-
   ${picking ? "outColor = objectId;" : ""}
 }
 `,
@@ -128,7 +111,7 @@ void main() {
         uMap: { value: atlasTexture },
         uOpacity: { value: 1 },
         uColor: { value: [1, 0, 0.5] },
-        uBackgroundColor: { value: [0, 1, 0] },
+        uBackgroundColor: { value: [0.6, 0.6, 1] },
       },
 
       side: THREE.DoubleSide,
@@ -231,10 +214,11 @@ export class Label extends THREE.Object3D {
     for (const char of layoutInfo.chars) {
       // instanceBoxPosition
       this.instanceAttributeData[i++] = char.left;
-      this.instanceAttributeData[i++] = char.boxTop;
+      this.instanceAttributeData[i++] = layoutInfo.height - char.boxTop - char.boxHeight;
       // instanceCharPosition
       this.instanceAttributeData[i++] = char.left;
-      this.instanceAttributeData[i++] = char.top;
+      this.instanceAttributeData[i++] =
+        layoutInfo.height - char.boxTop - char.boxHeight + char.top - char.boxTop;
       // instanceUv
       this.instanceAttributeData[i++] = char.atlasX;
       this.instanceAttributeData[i++] = char.atlasY;
