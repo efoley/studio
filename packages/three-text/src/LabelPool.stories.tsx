@@ -10,7 +10,7 @@ import { FontManager } from "./FontManager";
 import { LabelPool } from "./LabelPool";
 
 export default {
-  title: "panels/ThreeDeeRender/text/LabelPool",
+  title: "LabelPool",
 };
 
 Atlas.parameters = { colorScheme: "dark" };

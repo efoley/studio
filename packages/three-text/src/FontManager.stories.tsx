@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { AtlasData, FontManager } from "./FontManager";
 
 export default {
-  title: "panels/ThreeDeeRender/text/FontManager",
+  title: "FontManager",
 };
 
 function atlasToImageData(atlas: AtlasData) {
@@ -40,7 +40,7 @@ export function Atlas(): JSX.Element {
     ctx.putImageData(img, 0, 0);
   }, []);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} style={{ backgroundColor: "black" }} />;
 }
 
 Layout.parameters = { colorScheme: "dark" };
@@ -61,8 +61,8 @@ export function Layout(): JSX.Element {
     for (const char of layout.chars) {
       ctx.putImageData(
         img,
-        char.x - char.atlasX,
-        char.y - char.atlasY,
+        char.left - char.atlasX,
+        char.top - char.atlasY,
         char.atlasX,
         char.atlasY,
         char.width,
@@ -71,5 +71,5 @@ export function Layout(): JSX.Element {
     }
   }, []);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} style={{ backgroundColor: "black" }} />;
 }
