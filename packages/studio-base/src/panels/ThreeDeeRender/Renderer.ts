@@ -52,7 +52,7 @@ import {
   TRANSFORM_STAMPED_DATATYPES,
 } from "./ros";
 import { BaseSettings, CustomLayerSettings, SelectEntry } from "./settings";
-import { MAX_DURATION, Transform, TransformTree } from "./transforms";
+import { Transform, TransformTree } from "./transforms";
 
 const log = Logger.getLogger(__filename);
 
@@ -182,7 +182,7 @@ export class Renderer extends EventEmitter<RendererEvents> {
   selectedObject: Renderable | undefined;
   colorScheme: "dark" | "light" = "light";
   modelCache: ModelCache;
-  transformTree = new TransformTree(MAX_DURATION);
+  transformTree = new TransformTree();
   coordinateFrameList: SelectEntry[] = [];
   currentTime: bigint | undefined;
   fixedFrameId: string | undefined;
