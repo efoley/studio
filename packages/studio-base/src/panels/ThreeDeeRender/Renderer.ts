@@ -192,6 +192,8 @@ export class Renderer extends EventEmitter<RendererEvents> {
   labels = new Labels(this);
   markerPool = new MarkerPool(this);
 
+  private _prevResolution: THREE.Vector2 | undefined;
+
   constructor(canvas: HTMLCanvasElement, config: RendererConfig) {
     super();
 
@@ -617,7 +619,7 @@ export class Renderer extends EventEmitter<RendererEvents> {
     this.emit("startFrame", currentTime, this);
 
     this._updateFrames();
-    this._updateMaterials(this.input.canvasSize);
+    this._updateMaterials();
 
     this.gl.clear();
     camera.layers.set(LAYER_DEFAULT);
@@ -805,7 +807,13 @@ export class Renderer extends EventEmitter<RendererEvents> {
     }
   }
 
-  private _updateMaterials(resolution: THREE.Vector2): void {
+  private _updateMaterials(): void {
+    const resolution = this.input.canvasSize;
+    if (this._prevResolution?.equals(resolution) === true) {
+      return;
+    }
+    this._prevResolution = resolution;
+
     this.scene.traverse((object) => {
       if ((object as Partial<THREE.Mesh>).isMesh) {
         const mesh = object as THREE.Mesh;
