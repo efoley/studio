@@ -779,8 +779,9 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
     // Determine min/max color values (if needed) and max range
     let minColorValue = settings.minValue ?? Number.POSITIVE_INFINITY;
     let maxColorValue = settings.maxValue ?? Number.NEGATIVE_INFINITY;
-    let maxRange = 0;
     if (settings.minValue == undefined || settings.maxValue == undefined) {
+      let maxRange = 0;
+
       for (let i = 0; i < ranges.length; i++) {
         const range = ranges[i]!;
         maxRange = Math.max(maxRange, range);
@@ -793,6 +794,14 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
       }
       minColorValue = settings.minValue ?? minColorValue;
       maxColorValue = settings.maxValue ?? maxColorValue;
+
+      // Update the LaserScan bounding sphere
+      latestEntry.points.geometry.boundingSphere ??= new THREE.Sphere();
+      latestEntry.points.geometry.boundingSphere.set(VEC3_ZERO, maxRange);
+      latestEntry.points.frustumCulled = true;
+    } else {
+      latestEntry.points.geometry.boundingSphere = ReactNull;
+      latestEntry.points.frustumCulled = false;
     }
 
     // Build a method to convert raw color field values to RGBA
@@ -807,11 +816,6 @@ export class PointCloudsAndLaserScans extends SceneExtension<PointCloudAndLaserS
 
     rangeAttribute.needsUpdate = true;
     colorAttribute.needsUpdate = true;
-
-    // Update the LaserScan bounding sphere
-    latestEntry.points.geometry.boundingSphere ??= new THREE.Sphere();
-    latestEntry.points.geometry.boundingSphere.set(VEC3_ZERO, maxRange);
-    latestEntry.points.frustumCulled = true;
   }
 }
 
