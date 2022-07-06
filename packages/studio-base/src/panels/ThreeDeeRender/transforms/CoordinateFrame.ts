@@ -7,7 +7,8 @@
 
 import { mat4 } from "gl-matrix";
 
-import { SortedList } from "./SortedList";
+import { SortedList } from "@foxglove/den/collection/SortedList";
+
 import { Transform } from "./Transform";
 import { Pose, mat4Identity } from "./geometry";
 import { Duration, interpolate, percentOf, Time } from "./time";
