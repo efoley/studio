@@ -114,6 +114,7 @@ export default function UnlinkGlobalVariables({
       direction="row"
       align-items="center"
       style={{ wordBreak: "normal", display: "inline-flex" }}
+      gap={0.5}
     >
       <Tooltip
         title={
@@ -131,6 +132,7 @@ export default function UnlinkGlobalVariables({
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
+          data-test={`unlink-${firstLink.name}`}
         />
       </Tooltip>
       <GlobalVariableName name={firstLink.name} />
