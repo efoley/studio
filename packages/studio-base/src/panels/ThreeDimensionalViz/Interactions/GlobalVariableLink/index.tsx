@@ -11,54 +11,53 @@
 //   found at http://www.apache.org/licenses/LICENSE-2.0
 //   You may not use this file except in compliance with the License.
 
-import { CSSProperties } from "react";
-import styled from "styled-components";
+import { Menu, Tooltip, Typography } from "@mui/material";
+import { useState } from "react";
+
+import Stack from "@foxglove/studio-base/components/Stack";
+import GlobalVariableLinkButton from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableLink/GlobalVariableLinkButton";
+import GlobalVariableName from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableName";
 
 import { getLinkedGlobalVariable } from "../interactionUtils";
 import useLinkedGlobalVariables, { LinkedGlobalVariable } from "../useLinkedGlobalVariables";
 import LinkToGlobalVariable from "./LinkToGlobalVariable";
-import SGlobalVariableLink from "./SGlobalVariableLink";
 import UnlinkGlobalVariable from "./UnlinkGlobalVariable";
-import UnlinkWrapper from "./UnlinkWrapper";
-
-const SWrapper = styled.span`
-  display: inline-flex;
-  align-items: center;
-`;
-
-const SValue = styled.span`
-  padding: 0;
-`;
 
 type Props = {
   hasNestedValue?: boolean;
-  highlight?: boolean;
   label?: string;
   linkedGlobalVariable?: LinkedGlobalVariable;
   markerKeyPath?: string[];
-  nestedValueStyle?: CSSProperties;
-  onlyRenderAddLink?: boolean;
-  style?: CSSProperties;
   topic?: string;
-  unlinkTooltip?: React.ReactNode;
   variableValue?: unknown;
 };
 
+function getInitialName(markerKeyPath: string[]) {
+  return markerKeyPath.slice(0, 2).reverse().join("_");
+}
+
 export default function GlobalVariableLink({
   hasNestedValue = false,
-  highlight,
   label,
   linkedGlobalVariable,
   markerKeyPath,
-  nestedValueStyle = { marginLeft: 8 },
-  onlyRenderAddLink = false,
-  style = { marginLeft: 4 },
   topic,
-  unlinkTooltip,
   variableValue,
 }: Props): JSX.Element | ReactNull {
   const { linkedGlobalVariables } = useLinkedGlobalVariables();
+  const [anchorEl, setAnchorEl] = useState<undefined | HTMLElement>(undefined);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(undefined);
+  };
+
   let linkedGlobalVariableLocal: LinkedGlobalVariable | undefined = linkedGlobalVariable;
+
   if (!linkedGlobalVariableLocal && topic && markerKeyPath) {
     linkedGlobalVariableLocal = getLinkedGlobalVariable({
       topic,
@@ -76,28 +75,73 @@ export default function GlobalVariableLink({
     return ReactNull;
   }
 
-  const arrayBufferStyle = isArrayBuffer ? style : { cursor: "pointer" };
-  let wrapperStyle = hasNestedValue ? nestedValueStyle : style;
-  wrapperStyle = { ...arrayBufferStyle, ...wrapperStyle };
-
   return (
-    <SWrapper>
-      {label && <SValue>{label}</SValue>}
-      <SGlobalVariableLink style={wrapperStyle}>
-        {linkedGlobalVariableLocal && !onlyRenderAddLink && (
-          <UnlinkWrapper linkedGlobalVariable={linkedGlobalVariableLocal} tooltip={unlinkTooltip}>
-            {({ setIsOpen, linkedGlobalVariable: linkedVar }) => (
-              <UnlinkGlobalVariable linkedGlobalVariable={linkedVar} setIsOpen={setIsOpen} />
-            )}
-          </UnlinkWrapper>
-        )}
+    <Stack
+      paddingRight={0.75}
+      gap={0.5}
+      direction="row"
+      alignItems="center"
+      style={{ display: "inline-flex", marginRight: hasNestedValue ? -8 : 0 }}
+    >
+      {label && <span>{label}</span>}
+      {(linkedGlobalVariableLocal != undefined || renderAddLink) && (
+        <Tooltip
+          arrow
+          title={
+            <Typography variant="body2">
+              {linkedGlobalVariableLocal ? (
+                <>
+                  Unlink <GlobalVariableName name={linkedGlobalVariableLocal.name} />
+                </>
+              ) : (
+                "Link this field to a global variable"
+              )}
+            </Typography>
+          }
+        >
+          <GlobalVariableLinkButton
+            color="info"
+            linked={!renderAddLink}
+            id="link-button"
+            size="small"
+            aria-controls={open ? "link-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+            data-test={
+              linkedGlobalVariableLocal
+                ? `unlink-${linkedGlobalVariableLocal.name}`
+                : `link-${getInitialName(addToLinkedGlobalVariable?.markerKeyPath ?? [])}`
+            }
+          />
+        </Tooltip>
+      )}
+      {linkedGlobalVariableLocal != undefined && (
+        <GlobalVariableName name={linkedGlobalVariableLocal.name} />
+      )}
+      <Menu
+        id="link-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          disablePadding: true,
+          "aria-labelledby": "link-button",
+        }}
+      >
         {renderAddLink && (
           <LinkToGlobalVariable
-            highlight={highlight}
             addToLinkedGlobalVariable={addToLinkedGlobalVariable}
+            onClose={handleClose}
           />
         )}
-      </SGlobalVariableLink>
-    </SWrapper>
+        {linkedGlobalVariableLocal != undefined && (
+          <UnlinkGlobalVariable
+            linkedGlobalVariable={linkedGlobalVariableLocal}
+            onClose={handleClose}
+          />
+        )}
+      </Menu>
+    </Stack>
   );
 }

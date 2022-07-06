@@ -113,7 +113,6 @@ function ObjectDetails({ interactionData, selectedObject }: Props): JSX.Element 
             return (
               <GlobalVariableLink
                 hasNestedValue
-                style={{ marginLeft: 4 }}
                 label={label?.toString()}
                 markerKeyPath={markerKeyPath.map((item) => item.toString())}
                 topic={topic}
@@ -130,7 +129,6 @@ function ObjectDetails({ interactionData, selectedObject }: Props): JSX.Element 
         ) => {
           return (
             <GlobalVariableLink
-              style={{ marginLeft: 16 }}
               label={label}
               markerKeyPath={markerKeyPath.map((item) => item.toString())}
               topic={topic}

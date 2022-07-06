@@ -18,7 +18,6 @@ import Icon from "@foxglove/studio-base/components/Icon";
 import { LegacyTable } from "@foxglove/studio-base/components/LegacyStyledComponents";
 
 import GlobalVariableLink from "./GlobalVariableLink/index";
-import GlobalVariableName from "./GlobalVariableName";
 import { getPath } from "./interactionUtils";
 import { SEmptyState } from "./styling";
 import { LinkedGlobalVariables } from "./useLinkedGlobalVariables";
@@ -64,14 +63,7 @@ export default function LinkedGlobalVariableList({ linkedGlobalVariables }: Prop
           {linkedGlobalVariables.map((linkedGlobalVariable, index) => (
             <tr key={index}>
               <td>
-                <GlobalVariableLink
-                  linkedGlobalVariable={linkedGlobalVariable}
-                  unlinkTooltip={
-                    <span>
-                      Unlink <GlobalVariableName name={linkedGlobalVariable.name} />
-                    </span>
-                  }
-                />
+                <GlobalVariableLink linkedGlobalVariable={linkedGlobalVariable} />
               </td>
               <td style={{ wordBreak: "break-all" }}>
                 {linkedGlobalVariable.topic}.
