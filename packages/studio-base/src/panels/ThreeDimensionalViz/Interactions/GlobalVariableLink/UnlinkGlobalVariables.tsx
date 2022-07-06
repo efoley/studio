@@ -133,6 +133,7 @@ export default function UnlinkGlobalVariables({
           onClick={handleClick}
         />
       </Tooltip>
+      <GlobalVariableName name={firstLink.name} />
       <Menu
         id="unlink-menu"
         anchorEl={anchorEl}
