@@ -127,8 +127,8 @@ export default function UnlinkGlobalVariables({
           color="info"
           linked
           size="small"
-          id="unlink-button"
-          aria-controls={open ? "unlink-menu" : undefined}
+          id={`unlink-${firstLink.name}-button`}
+          aria-controls={open ? `unlink-${firstLink.name}-menu` : undefined}
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
@@ -137,13 +137,13 @@ export default function UnlinkGlobalVariables({
       </Tooltip>
       <GlobalVariableName name={firstLink.name} />
       <Menu
-        id="unlink-menu"
+        id={`unlink-${firstLink.name}-menu`}
         anchorEl={anchorEl}
         open
         onClose={handleClose}
         MenuListProps={{
           disablePadding: true,
-          "aria-labelledby": "unlink-button",
+          "aria-labelledby": `unlink-${firstLink.name}-menu`,
         }}
         PaperProps={{
           style: { pointerEvents: "auto", maxWidth: 320 },
