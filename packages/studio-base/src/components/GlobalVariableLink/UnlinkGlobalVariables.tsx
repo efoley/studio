@@ -135,7 +135,7 @@ export default function UnlinkGlobalVariables({
           data-test={`unlink-${firstLink.name}`}
         />
       </Tooltip>
-      <GlobalVariableName name={firstLink.name} />
+      <GlobalVariableName name={firstLink.name} paddingLeft />
       <Menu
         id={`unlink-${firstLink.name}-menu`}
         anchorEl={anchorEl}

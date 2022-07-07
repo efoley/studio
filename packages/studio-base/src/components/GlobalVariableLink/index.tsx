@@ -113,7 +113,7 @@ export default function GlobalVariableLink({
         </Tooltip>
       )}
       {linkedGlobalVariableLocal != undefined && (
-        <GlobalVariableName name={linkedGlobalVariableLocal.name} />
+        <GlobalVariableName name={linkedGlobalVariableLocal.name} paddingLeft />
       )}
       <Menu
         id="link-menu"

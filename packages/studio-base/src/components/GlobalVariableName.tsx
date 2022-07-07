@@ -4,16 +4,22 @@
 
 import { styled as muiStyled } from "@mui/material";
 
-const StyledText = muiStyled("span")(({ theme }) => ({
+const StyledText = muiStyled("span")<{ paddingLeft: boolean }>(({ theme, paddingLeft }) => ({
   color: theme.palette.warning.main,
   maxWidth: 100,
   fontWeight: 600,
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
-  paddingLeft: "1ch",
+  paddingLeft: paddingLeft ? "1ch" : undefined,
 }));
 
-export default function GlobalVariableName({ name }: { name: string }): JSX.Element {
-  return <StyledText title={name}>{`$${name}`}</StyledText>;
+export default function GlobalVariableName({
+  name,
+  paddingLeft = false,
+}: {
+  name: string;
+  paddingLeft?: boolean;
+}): JSX.Element {
+  return <StyledText paddingLeft={paddingLeft} title={name}>{`$${name}`}</StyledText>;
 }
