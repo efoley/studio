@@ -473,6 +473,17 @@ function MapPanel(props: MapPanelProps): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         geoJSON(JSON.parse(geoMessage.message.geojson), {
           onEachFeature: (_feature, layer) => addGeoFeatureEventHandlers(geoMessage, layer),
+          style: (feature) => {
+            return feature?.properties?.color ? {color: feature.properties.color, fillColor: feature.properties.color, } : {}
+          },
+          pointToLayer: (point, latlng) => {
+            return new CircleMarker(latlng, {
+              radius: POINT_MARKER_RADIUS,
+              color: point.properties.color,
+              stroke: false,
+              fillOpacity: 1
+            })
+          }
         }).addTo(topicLayer.currentFrame);
       }
     }
