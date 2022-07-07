@@ -132,6 +132,11 @@ export class Grids extends SceneExtension<GridRenderable> {
           handler,
         },
       });
+
+      // Create renderables for new grid layers
+      if (!this.renderables.has(instanceId)) {
+        this._updateGrid(instanceId, config);
+      }
     }
     return entries;
   }
@@ -172,15 +177,7 @@ export class Grids extends SceneExtension<GridRenderable> {
 
     this.saveSetting(path, action.payload.value);
 
-    // Update the renderable
     const instanceId = path[1]!;
-    let renderable = this.renderables.get(instanceId);
-
-    if (!renderable) {
-      log.warn(`Creating missing GridRenderable ${instanceId} in handleSettingsAction`);
-      renderable = this._createRenderable(instanceId);
-    }
-
     const settings = this.renderer.config.layers[instanceId] as
       | Partial<LayerSettingsGrid>
       | undefined;
