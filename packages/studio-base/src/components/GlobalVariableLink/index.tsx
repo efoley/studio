@@ -16,12 +16,12 @@ import { useState } from "react";
 
 import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Stack from "@foxglove/studio-base/components/Stack";
-import GlobalVariableLinkButton from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableLink/GlobalVariableLinkButton";
 
-import { getLinkedGlobalVariable } from "../interactionUtils";
-import useLinkedGlobalVariables, { LinkedGlobalVariable } from "../useLinkedGlobalVariables";
+import GlobalVariableLinkButton from "./GlobalVariableLinkButton";
 import LinkToGlobalVariable from "./LinkToGlobalVariable";
 import UnlinkGlobalVariable from "./UnlinkGlobalVariable";
+import useLinkedGlobalVariables, { LinkedGlobalVariable } from "./useLinkedGlobalVariables";
+import { getInitialName, getLinkedGlobalVariable } from "./utils";
 
 type Props = {
   hasNestedValue?: boolean;
@@ -31,10 +31,6 @@ type Props = {
   topic?: string;
   variableValue?: unknown;
 };
-
-function getInitialName(markerKeyPath: string[]) {
-  return markerKeyPath.slice(0, 2).reverse().join("_");
-}
 
 export default function GlobalVariableLink({
   hasNestedValue = false,

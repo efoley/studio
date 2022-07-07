@@ -14,10 +14,10 @@
 import LinkPlusIcon from "@mdi/svg/svg/link-plus.svg";
 import styled from "styled-components";
 
+import GlobalVariableLink from "@foxglove/studio-base/components/GlobalVariableLink";
 import Icon from "@foxglove/studio-base/components/Icon";
 import { LegacyTable } from "@foxglove/studio-base/components/LegacyStyledComponents";
 
-import GlobalVariableLink from "./GlobalVariableLink/index";
 import { getPath } from "./interactionUtils";
 import { SEmptyState } from "./styling";
 import { LinkedGlobalVariables } from "./useLinkedGlobalVariables";
