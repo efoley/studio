@@ -77,7 +77,7 @@ export default function GlobalVariableLink({
       gap={0.5}
       direction="row"
       alignItems="center"
-      style={{ display: "inline-flex", marginRight: hasNestedValue ? -8 : 0 }}
+      style={{ display: "inline-flex", marginRight: hasNestedValue ? -8 : undefined }}
     >
       {label && <span>{label}</span>}
       {(linkedGlobalVariableLocal != undefined || renderAddLink) && (

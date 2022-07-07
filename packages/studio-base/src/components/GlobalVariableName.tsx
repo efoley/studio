@@ -2,20 +2,18 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import { Typography } from "@mui/material";
+import { styled as muiStyled } from "@mui/material";
+
+const StyledText = muiStyled("span")(({ theme }) => ({
+  color: theme.palette.warning.main,
+  maxWidth: 100,
+  fontWeight: 600,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  paddingLeft: "1ch",
+}));
 
 export default function GlobalVariableName({ name }: { name: string }): JSX.Element {
-  return (
-    <Typography
-      variant="inherit"
-      component="span"
-      color="warning.main"
-      maxWidth={100}
-      fontWeight={600}
-      noWrap
-      title={name}
-    >
-      ${name}
-    </Typography>
-  );
+  return <StyledText title={name}>{`$${name}`}</StyledText>;
 }
