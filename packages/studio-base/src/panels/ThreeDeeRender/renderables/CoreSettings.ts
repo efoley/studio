@@ -39,6 +39,16 @@ export class CoreSettings extends SceneExtension {
     const camera = config.cameraState;
     const handler = this.handleSettingsAction;
 
+    const followTfOptions = this.renderer.coordinateFrameList;
+    let followTfValue =
+      this.renderer.followFrameId ?? config.followTf ?? this.renderer.renderFrameId;
+    if (
+      followTfValue != undefined &&
+      !followTfOptions.find((option) => option.value === followTfValue)
+    ) {
+      followTfValue = undefined;
+    }
+
     return [
       {
         path: ["general"],
@@ -48,8 +58,8 @@ export class CoreSettings extends SceneExtension {
             followTf: {
               label: "Frame",
               input: "select",
-              options: this.renderer.coordinateFrameList,
-              value: this.renderer.followFrameId ?? config.followTf,
+              options: followTfOptions,
+              value: followTfValue,
             },
           },
           defaultExpansionState: "expanded",
