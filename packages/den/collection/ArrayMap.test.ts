@@ -2,11 +2,11 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import { SortedList } from "./SortedList";
+import { ArrayMap } from "./ArrayMap";
 
-describe("SortedList", () => {
+describe("ArrayMap", () => {
   it("works with Number keys", () => {
-    const list = new SortedList<number, string>();
+    const list = new ArrayMap<number, string>();
     expect(list.size).toBe(0);
     expect(list.at(0)).toBeUndefined();
     expect(list.minEntry()).toBeUndefined();
@@ -51,7 +51,7 @@ describe("SortedList", () => {
   });
 
   it("works with BigInt keys", () => {
-    const list = new SortedList<BigInt, string>();
+    const list = new ArrayMap<BigInt, string>();
     expect(list.size).toBe(0);
     expect(list.at(0)).toBeUndefined();
     expect(list.minEntry()).toBeUndefined();

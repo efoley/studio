@@ -619,7 +619,7 @@ export class Renderer extends EventEmitter<RendererEvents> {
     this.emit("startFrame", currentTime, this);
 
     this._updateFrames();
-    this._updateMaterials();
+    this._updateResolution();
 
     this.gl.clear();
     camera.layers.set(LAYER_DEFAULT);
@@ -807,7 +807,7 @@ export class Renderer extends EventEmitter<RendererEvents> {
     }
   }
 
-  private _updateMaterials(): void {
+  private _updateResolution(): void {
     const resolution = this.input.canvasSize;
     if (this._prevResolution?.equals(resolution) === true) {
       return;

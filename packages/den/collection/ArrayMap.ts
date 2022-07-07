@@ -7,7 +7,7 @@
  * (either number or BigInt). Keys are unique, so setting a value with the same
  * key as an existing entry is a replacement operation.
  */
-export class SortedList<K, V> {
+export class ArrayMap<K, V> {
   private _list: [K, V][] = [];
 
   // eslint-disable-next-line no-restricted-syntax

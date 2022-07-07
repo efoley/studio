@@ -7,7 +7,7 @@
 
 import { mat4 } from "gl-matrix";
 
-import { SortedList } from "@foxglove/den/collection/SortedList";
+import { ArrayMap } from "@foxglove/den/collection/ArrayMap";
 
 import { Transform } from "./Transform";
 import { Pose, mat4Identity } from "./geometry";
@@ -35,7 +35,7 @@ export class CoordinateFrame {
   maxCapacity: number;
 
   private _parent?: CoordinateFrame;
-  private _transforms: SortedList<Time, Transform>;
+  private _transforms: ArrayMap<Time, Transform>;
 
   constructor(
     id: string,
@@ -47,7 +47,7 @@ export class CoordinateFrame {
     this.maxStorageTime = maxStorageTime;
     this.maxCapacity = maxCapacity;
     this._parent = parent;
-    this._transforms = new SortedList<Time, Transform>();
+    this._transforms = new ArrayMap<Time, Transform>();
   }
 
   parent(): CoordinateFrame | undefined {
