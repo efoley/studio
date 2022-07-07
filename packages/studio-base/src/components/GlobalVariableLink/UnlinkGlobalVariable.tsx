@@ -18,8 +18,8 @@ import { useCallback } from "react";
 import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Stack from "@foxglove/studio-base/components/Stack";
 
-import { getPath } from "../interactionUtils";
-import useLinkedGlobalVariables, { LinkedGlobalVariable } from "../useLinkedGlobalVariables";
+import useLinkedGlobalVariables, { LinkedGlobalVariable } from "./useLinkedGlobalVariables";
+import { getPath } from "./utils";
 
 type Props = {
   linkedGlobalVariable: LinkedGlobalVariable;

@@ -18,8 +18,8 @@ import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableN
 import Stack from "@foxglove/studio-base/components/Stack";
 import useGlobalVariables from "@foxglove/studio-base/hooks/useGlobalVariables";
 
-import useLinkedGlobalVariables from "../useLinkedGlobalVariables";
 import UnlinkGlobalVariables from "./UnlinkGlobalVariables";
+import useLinkedGlobalVariables from "./useLinkedGlobalVariables";
 
 type AddToLinkedGlobalVariable = {
   topic: string;
