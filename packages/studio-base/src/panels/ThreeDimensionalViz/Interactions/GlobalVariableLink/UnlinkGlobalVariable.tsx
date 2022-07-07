@@ -15,8 +15,8 @@ import { Button, Typography } from "@mui/material";
 import { isEqual } from "lodash";
 import { useCallback } from "react";
 
+import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Stack from "@foxglove/studio-base/components/Stack";
-import GlobalVariableName from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableName";
 
 import { getPath } from "../interactionUtils";
 import useLinkedGlobalVariables, { LinkedGlobalVariable } from "../useLinkedGlobalVariables";

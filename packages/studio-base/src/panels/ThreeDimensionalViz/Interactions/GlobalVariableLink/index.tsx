@@ -14,9 +14,9 @@
 import { Menu, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 
+import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Stack from "@foxglove/studio-base/components/Stack";
 import GlobalVariableLinkButton from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableLink/GlobalVariableLinkButton";
-import GlobalVariableName from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableName";
 
 import { getLinkedGlobalVariable } from "../interactionUtils";
 import useLinkedGlobalVariables, { LinkedGlobalVariable } from "../useLinkedGlobalVariables";

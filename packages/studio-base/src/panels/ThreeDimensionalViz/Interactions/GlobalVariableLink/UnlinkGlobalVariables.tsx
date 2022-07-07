@@ -15,9 +15,9 @@ import { Button, Typography, styled as muiStyled, Menu, Tooltip } from "@mui/mat
 import { isEqual } from "lodash";
 import { useState } from "react";
 
+import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Stack from "@foxglove/studio-base/components/Stack";
 import GlobalVariableLinkButton from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableLink/GlobalVariableLinkButton";
-import GlobalVariableName from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableName";
 
 import { getPath } from "../interactionUtils";
 import useLinkedGlobalVariables, { LinkedGlobalVariable } from "../useLinkedGlobalVariables";

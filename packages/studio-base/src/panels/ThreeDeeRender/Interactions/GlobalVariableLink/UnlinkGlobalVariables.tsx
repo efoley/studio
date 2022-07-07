@@ -14,9 +14,9 @@
 import { Button, Card, Typography, styled as muiStyled } from "@mui/material";
 import { isEqual } from "lodash";
 
+import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Stack from "@foxglove/studio-base/components/Stack";
 
-import GlobalVariableName from "../GlobalVariableName";
 import { getPath } from "../interactionUtils";
 import useLinkedGlobalVariables, { LinkedGlobalVariable } from "../useLinkedGlobalVariables";
 import SGlobalVariableLink from "./SGlobalVariableLink";

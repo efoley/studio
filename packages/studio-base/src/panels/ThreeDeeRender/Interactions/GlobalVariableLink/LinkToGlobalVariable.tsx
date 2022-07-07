@@ -17,11 +17,11 @@ import classNames from "classnames";
 import React, { CSSProperties, FormEvent } from "react";
 
 import ChildToggle from "@foxglove/studio-base/components/ChildToggle";
+import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Icon from "@foxglove/studio-base/components/Icon";
 import Stack from "@foxglove/studio-base/components/Stack";
 import { colors } from "@foxglove/studio-base/util/sharedStyleConstants";
 
-import GlobalVariableName from "../GlobalVariableName";
 import useLinkedGlobalVariables from "../useLinkedGlobalVariables";
 import UnlinkGlobalVariables from "./UnlinkGlobalVariables";
 

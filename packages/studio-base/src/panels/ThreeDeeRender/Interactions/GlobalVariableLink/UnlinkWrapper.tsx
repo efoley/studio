@@ -17,9 +17,9 @@ import { useState, ReactNode } from "react";
 import styled from "styled-components";
 
 import ChildToggle from "@foxglove/studio-base/components/ChildToggle";
+import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Icon from "@foxglove/studio-base/components/Icon";
 
-import GlobalVariableName from "../GlobalVariableName";
 import { LinkedGlobalVariable } from "../useLinkedGlobalVariables";
 
 const SIconWrapper = styled.span`
@@ -90,7 +90,7 @@ export default function UnlinkWrapper({
         </SIconWrapper>
         <span>{children({ setIsOpen, linkedGlobalVariable })}</span>
       </ChildToggle>
-      <GlobalVariableName name={linkedGlobalVariable.name} leftPadding />
+      <GlobalVariableName name={linkedGlobalVariable.name} />
     </>
   );
 }

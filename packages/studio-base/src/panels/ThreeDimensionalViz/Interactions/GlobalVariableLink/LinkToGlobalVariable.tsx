@@ -14,9 +14,9 @@
 import { Button, FilledInput, Typography } from "@mui/material";
 import React, { FormEvent } from "react";
 
+import GlobalVariableName from "@foxglove/studio-base/components/GlobalVariableName";
 import Stack from "@foxglove/studio-base/components/Stack";
 import useGlobalVariables from "@foxglove/studio-base/hooks/useGlobalVariables";
-import GlobalVariableName from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/GlobalVariableName";
 
 import useLinkedGlobalVariables from "../useLinkedGlobalVariables";
 import UnlinkGlobalVariables from "./UnlinkGlobalVariables";
