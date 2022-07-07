@@ -19,6 +19,7 @@ import ExpandingToolbar, {
   ToolGroup,
   ToolGroupFixedSizePane,
 } from "@foxglove/studio-base/components/ExpandingToolbar";
+import useLinkedGlobalVariables from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import PanelContext from "@foxglove/studio-base/components/PanelContext";
 import ObjectDetails from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/ObjectDetails";
 import TopicLink from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/TopicLink";
@@ -33,7 +34,6 @@ import { maybeCast } from "@foxglove/studio-base/util/maybeCast";
 import LinkedGlobalVariableList from "./LinkedGlobalVariableList";
 import PointCloudDetails from "./PointCloudDetails";
 import { SEmptyState, SRow, SValue } from "./styling";
-import useLinkedGlobalVariables from "./useLinkedGlobalVariables";
 
 export const OBJECT_TAB_TYPE = "Selected object";
 export const LINKED_VARIABLES_TAB_TYPE = "Linked variables";

@@ -15,6 +15,7 @@ import { Stack } from "@mui/material";
 import { storiesOf } from "@storybook/react";
 import styled from "styled-components";
 
+import useLinkedGlobalVariables from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import MockPanelContextProvider from "@foxglove/studio-base/components/MockPanelContextProvider";
 import useGlobalVariables from "@foxglove/studio-base/hooks/useGlobalVariables";
 import { decodeMarker } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/PointClouds/decodeMarker";
@@ -25,7 +26,6 @@ import {
 import PanelSetup, { triggerInputChange } from "@foxglove/studio-base/stories/PanelSetup";
 
 import Interactions, { OBJECT_TAB_TYPE, LINKED_VARIABLES_TAB_TYPE } from "./Interactions";
-import useLinkedGlobalVariables from "./useLinkedGlobalVariables";
 
 const SWrapper = styled.div`
   background: ${({ theme }) => theme.palette.neutralLighterAlt};

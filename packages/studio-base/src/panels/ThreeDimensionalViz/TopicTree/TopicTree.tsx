@@ -29,10 +29,10 @@ import React, { useCallback, useMemo, useRef } from "react";
 import { useResizeDetector } from "react-resize-detector";
 import { CSSTransition } from "react-transition-group";
 
+import useLinkedGlobalVariables from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import { PANEL_TOOLBAR_MIN_HEIGHT } from "@foxglove/studio-base/components/PanelToolbar";
 import useChangeDetector from "@foxglove/studio-base/hooks/useChangeDetector";
 import { Save3DConfig } from "@foxglove/studio-base/panels/ThreeDimensionalViz";
-import useLinkedGlobalVariables from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/useLinkedGlobalVariables";
 import TopicTreeSwitcher, {
   SWITCHER_HEIGHT,
 } from "@foxglove/studio-base/panels/ThreeDimensionalViz/TopicTree/TopicTreeSwitcher";

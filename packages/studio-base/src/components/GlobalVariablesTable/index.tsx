@@ -17,6 +17,7 @@ import { partition, pick, union, without } from "lodash";
 import { useEffect, useMemo, useCallback, useRef, useState, ReactElement } from "react";
 import styled, { css, FlattenSimpleInterpolation, keyframes } from "styled-components";
 
+import useLinkedGlobalVariables from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import Icon from "@foxglove/studio-base/components/Icon";
 import { LegacyTable } from "@foxglove/studio-base/components/LegacyStyledComponents";
 import Menu, { Item } from "@foxglove/studio-base/components/Menu";
@@ -26,7 +27,6 @@ import { ValidatedResizingInput } from "@foxglove/studio-base/components/input/V
 import useGlobalVariables, {
   GlobalVariables,
 } from "@foxglove/studio-base/hooks/useGlobalVariables";
-import useLinkedGlobalVariables from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/useLinkedGlobalVariables";
 import { colors as sharedColors, fonts } from "@foxglove/studio-base/util/sharedStyleConstants";
 
 // The minimum amount of time to wait between showing the global variable update animation again

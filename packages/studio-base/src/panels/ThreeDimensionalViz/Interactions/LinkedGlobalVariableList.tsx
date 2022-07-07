@@ -15,12 +15,12 @@ import LinkPlusIcon from "@mdi/svg/svg/link-plus.svg";
 import styled from "styled-components";
 
 import GlobalVariableLink from "@foxglove/studio-base/components/GlobalVariableLink";
+import { LinkedGlobalVariables } from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import { getPath } from "@foxglove/studio-base/components/GlobalVariableLink/utils";
 import Icon from "@foxglove/studio-base/components/Icon";
 import { LegacyTable } from "@foxglove/studio-base/components/LegacyStyledComponents";
 
 import { SEmptyState } from "./styling";
-import { LinkedGlobalVariables } from "./useLinkedGlobalVariables";
 
 const SPath = styled.span`
   opacity: 0.8;

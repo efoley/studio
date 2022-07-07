@@ -25,6 +25,7 @@ import { Worldview, CameraState, ReglClickInfo, MouseEventObject } from "@foxglo
 import { Time } from "@foxglove/rostime";
 import * as PanelAPI from "@foxglove/studio-base/PanelAPI";
 import { useDataSourceInfo } from "@foxglove/studio-base/PanelAPI";
+import useLinkedGlobalVariables from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import KeyListener from "@foxglove/studio-base/components/KeyListener";
 import PanelToolbar from "@foxglove/studio-base/components/PanelToolbar";
 import useGlobalVariables from "@foxglove/studio-base/hooks/useGlobalVariables";
@@ -40,7 +41,6 @@ import {
   OBJECT_TAB_TYPE,
   TabType,
 } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions";
-import useLinkedGlobalVariables from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/useLinkedGlobalVariables";
 import LayoutToolbar from "@foxglove/studio-base/panels/ThreeDimensionalViz/LayoutToolbar";
 import SceneBuilder from "@foxglove/studio-base/panels/ThreeDimensionalViz/SceneBuilder";
 import { useSearchText } from "@foxglove/studio-base/panels/ThreeDimensionalViz/SearchText";
