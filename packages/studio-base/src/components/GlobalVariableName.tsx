@@ -4,7 +4,9 @@
 
 import { styled as muiStyled } from "@mui/material";
 
-const StyledText = muiStyled("span")<{ paddingLeft: boolean }>(({ theme, paddingLeft }) => ({
+const StyledText = muiStyled("span", {
+  shouldForwardProp: (prop) => prop !== "paddingLeft",
+})<{ paddingLeft: boolean }>(({ theme, paddingLeft }) => ({
   color: theme.palette.warning.main,
   maxWidth: 100,
   fontWeight: 600,

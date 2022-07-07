@@ -17,10 +17,7 @@
 
 import { keyBy } from "lodash";
 
-import {
-  LinkedGlobalVariables,
-  LinkedGlobalVariable,
-} from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/useLinkedGlobalVariables";
+import { LinkedGlobalVariables, LinkedGlobalVariable } from "./useLinkedGlobalVariables";
 
 export function getInitialName(markerKeyPath: string[]): string {
   return markerKeyPath.slice(0, 2).reverse().join("_");

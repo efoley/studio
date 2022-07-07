@@ -11,17 +11,17 @@ import HoverableIconButton, {
   HoverableIconButtonProps,
 } from "@foxglove/studio-base/components/HoverableIconButton";
 
-const StyledHoverableIconButton = muiStyled(HoverableIconButton)<{ linked: boolean }>(
-  ({ theme, linked }) => ({
-    padding: 0,
-    opacity: linked ? 1 : theme.palette.action.disabledOpacity,
+const StyledHoverableIconButton = muiStyled(HoverableIconButton, {
+  shouldForwardProp: (prop) => prop !== "linked",
+})<{ linked: boolean }>(({ theme, linked }) => ({
+  padding: 0,
+  opacity: linked ? 1 : theme.palette.action.disabledOpacity,
 
-    "&:hover": {
-      backgroundColor: "transparent",
-      opacity: 1,
-    },
-  }),
-);
+  "&:hover": {
+    backgroundColor: "transparent",
+    opacity: 1,
+  },
+}));
 
 export default function GlobalVariableLinkButton(
   props: {

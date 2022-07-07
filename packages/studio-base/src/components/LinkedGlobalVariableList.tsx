@@ -11,26 +11,49 @@
 //   found at http://www.apache.org/licenses/LICENSE-2.0
 //   You may not use this file except in compliance with the License.
 
-import LinkPlusIcon from "@mdi/svg/svg/link-plus.svg";
-import styled from "styled-components";
+import AddLink from "@mui/icons-material/AddLink";
+import { Typography, styled as muiStyled } from "@mui/material";
 
 import GlobalVariableLink from "@foxglove/studio-base/components/GlobalVariableLink";
 import { LinkedGlobalVariables } from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import { getPath } from "@foxglove/studio-base/components/GlobalVariableLink/utils";
-import Icon from "@foxglove/studio-base/components/Icon";
-import { LegacyTable } from "@foxglove/studio-base/components/LegacyStyledComponents";
 
-import { SEmptyState } from "./styling";
+const StyledTable = muiStyled("table")`
+  border: none;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 
-const SPath = styled.span`
-  opacity: 0.8;
-`;
+  th {
+    color: ${({ theme }) => theme.palette.text.primary};
 
-const STable = styled(LegacyTable)`
+    tr:first-of-type & {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  }
+  th,
   td {
-    padding: 0.3em;
     border: none;
     vertical-align: middle;
+    padding: 0 0.3em;
+    line-height: 1.3em;
+  }
+  tr {
+    svg {
+      opacity: 0.6;
+    }
+  }
+
+  tr:hover {
+    td {
+      background-color: ${({ theme }) => theme.palette.action.hover};
+      cursor: pointer;
+    }
+
+    svg {
+      opacity: 0.8;
+    }
   }
 `;
 
@@ -41,24 +64,18 @@ type Props = {
 export default function LinkedGlobalVariableList({ linkedGlobalVariables }: Props): JSX.Element {
   if (linkedGlobalVariables.length === 0) {
     return (
-      <SEmptyState>
-        Click the{" "}
-        <Icon
-          style={{ display: "inline", verticalAlign: "middle", lineHeight: 1 }}
-          clickable={false}
-        >
-          <LinkPlusIcon />
-        </Icon>{" "}
+      <Typography color="text.disabled" variant="body2" gutterBottom>
+        Click the <AddLink fontSize="small" />
         icon in the “Selected object” tab to link values with global variables.
-      </SEmptyState>
+      </Typography>
     );
   }
   return (
     <>
-      <SEmptyState>
+      <Typography color="text.disabled" variant="body2" gutterBottom>
         Clicking on objects from these topics will update the linked global variables.
-      </SEmptyState>
-      <STable>
+      </Typography>
+      <StyledTable>
         <tbody>
           {linkedGlobalVariables.map((linkedGlobalVariable, index) => (
             <tr key={index}>
@@ -67,12 +84,14 @@ export default function LinkedGlobalVariableList({ linkedGlobalVariables }: Prop
               </td>
               <td style={{ wordBreak: "break-all" }}>
                 {linkedGlobalVariable.topic}.
-                <SPath>{getPath(linkedGlobalVariable.markerKeyPath)}</SPath>
+                <Typography variant="inherit" component="span" color="text.secondary">
+                  {getPath(linkedGlobalVariable.markerKeyPath)}
+                </Typography>
               </td>
             </tr>
           ))}
         </tbody>
-      </STable>
+      </StyledTable>
     </>
   );
 }

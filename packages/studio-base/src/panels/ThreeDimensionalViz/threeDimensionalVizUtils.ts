@@ -22,9 +22,9 @@ import {
   MouseEventObject,
   DEFAULT_CAMERA_STATE,
 } from "@foxglove/regl-worldview";
+import { LinkedGlobalVariables } from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import { GlobalVariables } from "@foxglove/studio-base/hooks/useGlobalVariables";
 import { InteractionData } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/types";
-import { LinkedGlobalVariables } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/useLinkedGlobalVariables";
 import { IImmutableTransformTree } from "@foxglove/studio-base/panels/ThreeDimensionalViz/transforms";
 import { FollowMode } from "@foxglove/studio-base/panels/ThreeDimensionalViz/types";
 import { InstancedLineListMarker, MutablePose } from "@foxglove/studio-base/types/Messages";

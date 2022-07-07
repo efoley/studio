@@ -19,12 +19,12 @@ import ExpandingToolbar, {
   ToolGroupFixedSizePane,
 } from "@foxglove/studio-base/components/ExpandingToolbar";
 import useLinkedGlobalVariables from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
+import LinkedGlobalVariableList from "@foxglove/studio-base/components/LinkedGlobalVariableList";
 import { decodeAdditionalFields } from "@foxglove/studio-base/panels/ThreeDimensionalViz/commands/PointClouds/selection";
 import { PointCloud2 } from "@foxglove/studio-base/types/Messages";
 import { maybeCast } from "@foxglove/studio-base/util/maybeCast";
 
 import { Pose } from "../transforms";
-import LinkedGlobalVariableList from "./LinkedGlobalVariableList";
 import ObjectDetails from "./ObjectDetails";
 import PointCloudDetails from "./PointCloudDetails";
 import TopicLink from "./TopicLink";

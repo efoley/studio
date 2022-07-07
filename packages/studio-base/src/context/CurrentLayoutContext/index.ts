@@ -7,10 +7,10 @@ import { getLeaves } from "react-mosaic-component";
 
 import { useShallowMemo } from "@foxglove/hooks";
 import Logger from "@foxglove/log";
+import { LinkedGlobalVariables } from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import { selectWithUnstableIdentityWarning } from "@foxglove/studio-base/hooks/selectWithUnstableIdentityWarning";
 import useGuaranteedContext from "@foxglove/studio-base/hooks/useGuaranteedContext";
 import useShouldNotChangeOften from "@foxglove/studio-base/hooks/useShouldNotChangeOften";
-import { LinkedGlobalVariables } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/useLinkedGlobalVariables";
 import toggleSelectedPanel from "@foxglove/studio-base/providers/CurrentLayoutProvider/toggleSelectedPanel";
 import { LayoutID } from "@foxglove/studio-base/services/ILayoutStorage";
 import { PanelConfig, PlaybackConfig, UserNodes } from "@foxglove/studio-base/types/panels";

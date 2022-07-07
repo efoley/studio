@@ -12,8 +12,8 @@
 //   You may not use this file except in compliance with the License.
 import { MosaicNode, MosaicPath } from "react-mosaic-component";
 
+import { LinkedGlobalVariables } from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
 import { GlobalVariables } from "@foxglove/studio-base/hooks/useGlobalVariables";
-import { LinkedGlobalVariables } from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/useLinkedGlobalVariables";
 import { TabLocation } from "@foxglove/studio-base/types/layouts";
 import {
   UserNodes,

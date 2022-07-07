@@ -20,6 +20,7 @@ import ExpandingToolbar, {
   ToolGroupFixedSizePane,
 } from "@foxglove/studio-base/components/ExpandingToolbar";
 import useLinkedGlobalVariables from "@foxglove/studio-base/components/GlobalVariableLink/useLinkedGlobalVariables";
+import LinkedGlobalVariableList from "@foxglove/studio-base/components/LinkedGlobalVariableList";
 import PanelContext from "@foxglove/studio-base/components/PanelContext";
 import ObjectDetails from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/ObjectDetails";
 import TopicLink from "@foxglove/studio-base/panels/ThreeDimensionalViz/Interactions/TopicLink";
@@ -31,7 +32,6 @@ import { PointCloud2 } from "@foxglove/studio-base/types/Messages";
 import { SaveConfig, PanelConfig } from "@foxglove/studio-base/types/panels";
 import { maybeCast } from "@foxglove/studio-base/util/maybeCast";
 
-import LinkedGlobalVariableList from "./LinkedGlobalVariableList";
 import PointCloudDetails from "./PointCloudDetails";
 import { SEmptyState, SRow, SValue } from "./styling";
 
