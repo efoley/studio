@@ -34,7 +34,7 @@ export type LayerSettingsGrid = CustomLayerSettings & {
 const LAYER_ID = "foxglove.Grid";
 const DEFAULT_SIZE = 10;
 const DEFAULT_DIVISIONS = 10;
-const DEFAULT_LINE_WIDTH = 0.01;
+const DEFAULT_LINE_WIDTH = 0.02;
 const DEFAULT_COLOR = "#248eff";
 const MAX_DIVISIONS = 4096; // The JS heap size is a limiting factor
 
