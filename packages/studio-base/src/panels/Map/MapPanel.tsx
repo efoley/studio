@@ -474,14 +474,25 @@ function MapPanel(props: MapPanelProps): JSX.Element {
         geoJSON(JSON.parse(geoMessage.message.geojson), {
           onEachFeature: (_feature, layer) => addGeoFeatureEventHandlers(geoMessage, layer),
           style: (feature) => {
-            return feature?.properties?.color ? {color: feature.properties.color, fillColor: feature.properties.color, } : {}
+            if (feature == undefined || feature.properties == undefined) {
+              return {};
+            }
+
+            const properties = feature.properties
+
+            return {
+              color: properties.color,
+              fillColor: properties.fillColor,
+              opacity: properties.opacity,
+            };
           },
           pointToLayer: (point, latlng) => {
+            const properties = point.properties;
             return new CircleMarker(latlng, {
-              radius: POINT_MARKER_RADIUS,
-              color: point.properties.color,
+              radius: properties.radius ?? POINT_MARKER_RADIUS,
+              color: properties.color,
+              opacity: properties.opacity,
               stroke: false,
-              fillOpacity: 1
             })
           }
         }).addTo(topicLayer.currentFrame);
